@@ -11,6 +11,8 @@ export const OrderedDeck = flatten(
 );
 
 function getInitialState(cards) {
+
+
     return Map({
         [Places.FOUNDATION]: Map({
             HEARTS: List(),
@@ -90,6 +92,7 @@ function turnCard(state, action) {
 }
 
 export default function game(
+    
     state = getInitialState(shuffle(OrderedDeck)),
     action
 ) {

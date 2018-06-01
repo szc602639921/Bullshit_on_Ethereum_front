@@ -13,9 +13,10 @@ const foundationTarget = {
     },
 
     canDrop(props, monitor, component) {
-        const { suit, rank } = monitor.getItem();
-        const firstCard = first(props.cards);
-        return suit === props.suit && firstCard === undefined && rank === 'A';
+        //const { suit, rank } = monitor.getItem();
+        //const firstCard = first(props.cards);
+        //return suit === props.suit && firstCard === undefined && rank === 'A';
+        return true;
     }
 };
 

@@ -1,5 +1,4 @@
 import React from 'react';
-import SmartDeck from './SmartDeck.jsx';
 import SmartPile from  './SmartPile.jsx';
 import SmartFoundation from './SmartFoundation.jsx';
 import { DragDropContext } from 'react-dnd';
@@ -8,8 +7,25 @@ import range from 'lodash/range';
 import { connect } from 'react-redux';
 import ActionCreators from '../../actions';
 import { Colors, Dimensions } from '../../constants';
+import Card from '../display/Card.jsx';
 
-@connect((state) => { return { game: state.game.toJS(), score: state.score } })
+function MyCard (rank, suit) {
+    this.rank = rank;
+    this.suit = suit;
+    this.upturned = true;
+}
+
+@connect((state) => { 
+    var Web3 = require('web3');
+
+    var web3 = new Web3('ws://localhost:7545');
+    console.log(web3)
+    console.log("WEB3 loaded");
+    web3.eth.getAccounts().then(console.log);
+
+    return { game: state.game.toJS(), score: state.score } 
+})
+
 @DragDropContext(HTML5Backend)
 class Game extends React.Component {
 
@@ -26,7 +42,11 @@ class Game extends React.Component {
     render() {
         const { game, score } = this.props;
         const { moveCards, turnCard } = this;
-        console.log(score);
+        var stack = [];
+        for(var i=1; i<6;i++){
+            game.PILE[i] = [new MyCard(""+(i+2), "HEARTS")];
+        }
+
         return (
             <div style={{
                 width: Dimensions.Game.width,
@@ -35,33 +55,19 @@ class Game extends React.Component {
                 padding: 10
             }}>
                 <div style={{display: 'flex', justifyContent: 'space-between'}}>
-                    <SmartDeck deck={game.DECK} turnCard={turnCard} />
-                    <div style={{
-                        width: 540,
-                        display: 'flex',
-                        justifyContent: 'space-between'
-                    }}>
+
+                        <Card
+                            rank={"A"}
+                            suit={"SPADES"}
+                            upturned={true}
+                        />
+
                         <SmartFoundation
                             suit="HEARTS"
                             cards={game.FOUNDATION.HEARTS}
                             moveCards={moveCards}
                         />
-                        <SmartFoundation
-                            suit="DIAMONDS"
-                            cards={game.FOUNDATION.DIAMONDS}
-                            moveCards={moveCards}
-                        />
-                        <SmartFoundation
-                            suit="CLUBS"
-                            cards={game.FOUNDATION.CLUBS}
-                            moveCards={moveCards}
-                        />
-                        <SmartFoundation
-                            suit="SPADES"
-                            cards={game.FOUNDATION.SPADES}
-                            moveCards={moveCards}
-                        />
-                    </div>
+                        
                 </div>
                 <div style={{
                     display: 'flex',
@@ -70,7 +76,7 @@ class Game extends React.Component {
                     marginTop: 40
                 }}>
                 {
-                    range(0, 6).map(index =>
+                    range(1, 6).map(index =>
                         <SmartPile
                             cards={game.PILE[index]}
                             index={index}
@@ -80,6 +86,7 @@ class Game extends React.Component {
                     )
                 }
                 </div>
+                
             </div>
         );
     }
