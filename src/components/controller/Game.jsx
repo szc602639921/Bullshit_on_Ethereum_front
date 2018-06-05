@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import ActionCreators from '../../actions';
 import { Colors, Dimensions } from '../../constants';
 import Card from '../display/Card.jsx';
+import EthWrapper from './EthWrapper.jsx'
 
 function MyCard (rank, suit) {
     this.rank = rank;
@@ -16,13 +17,6 @@ function MyCard (rank, suit) {
 }
 
 @connect((state) => { 
-    var Web3 = require('web3');
-
-    var web3 = new Web3('ws://localhost:7545');
-    console.log(web3)
-    console.log("WEB3 loaded");
-    web3.eth.getAccounts().then(console.log);
-
     return { game: state.game.toJS(), score: state.score } 
 })
 
@@ -44,7 +38,8 @@ class Game extends React.Component {
         const { moveCards, turnCard } = this;
         var stack = [];
         for(var i=1; i<6;i++){
-            game.PILE[i] = [new MyCard(""+(i+2), "HEARTS")];
+            //game.PILE[i] = [new MyCard(""+(i+2), "HEARTS")];
+            //console.log(new MyCard(""+(i+2), "HEARTS"));
         }
 
         return (

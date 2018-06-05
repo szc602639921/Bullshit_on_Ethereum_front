@@ -19,6 +19,8 @@
   "author": "Edoardo Colombo <edo.gcolombo@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "file-system": "^2.2.2",
+    "fs": "0.0.1-security",
     "immutable": "^3.7.5",
     "lodash": "^4.17.5",
     "prop-types": "^15.6.0",
@@ -29,7 +31,8 @@
     "react-prefixer": "^2.0.0",
     "react-redux": "^5.0.6",
     "redux": "^3.0.2",
-    "web3": "^1.0.0-beta.34"
+    "web3": "^1.0.0-beta.34",
+    "webpack": "^3.12.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",

@@ -1,6 +1,7 @@
 import ReactDOM from 'react-dom';
 import React from 'react';
 import Game from './components/controller/Game.jsx';
+import Info from './components/controller/Info.jsx'
 import Card from './components/display/Card.jsx';
 import { Suits, Ranks } from './constants';
 import Deck from './components/display/Deck.jsx';
@@ -34,3 +35,11 @@ ReactDOM.render(
     document.getElementById('game')
 );
 
+ReactDOM.render(
+    <div>
+        <Provider store={store}>
+            <Info />
+        </Provider>
+    </div>,
+    document.getElementById('info')
+);
