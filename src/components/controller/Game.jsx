@@ -46,17 +46,22 @@ class Game extends React.Component {
             <div style={{
                 width: Dimensions.Game.width,
                 height: Dimensions.Game.height,
-                backgroundColor: Colors.Game.backgroundColor,
                 padding: 10
             }}>
-                <div style={{display: 'flex', justifyContent: 'space-between'}}>
-
+                <div style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    width: '70%',
+                    marginTop: 40
+                }}>
+                        <h2>Current Card</h2>
                         <Card
                             rank={"A"}
                             suit={"SPADES"}
                             upturned={true}
                         />
 
+                        <h2>Your Card</h2>
                         <SmartFoundation
                             suit="HEARTS"
                             cards={game.FOUNDATION.HEARTS}
@@ -64,14 +69,15 @@ class Game extends React.Component {
                         />
                         
                 </div>
+                <h2>Your Deck</h2>
                 <div style={{
                     display: 'flex',
                     justifyContent: 'space-between',
-                    width: '100%',
+                    width: '70%',
                     marginTop: 40
                 }}>
                 {
-                    range(1, 6).map(index =>
+                    range(0, 4).map(index =>
                         <SmartPile
                             cards={game.PILE[index]}
                             index={index}

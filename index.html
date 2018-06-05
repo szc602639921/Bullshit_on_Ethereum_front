@@ -2,12 +2,39 @@
 <html>
   <head>
     <title>Bullshit on the Blockchain</title>
+
+<!--.This is used to split the page in two parts.-->
+    <style>
+      .body{
+        background:#4CAF50;
+      }
+      #sides{
+      margin:0;
+      }
+      .left{
+      float:left;
+      width:50%;
+      overflow:hidden;
+      }
+      .right{
+      float:left;
+      width:50%;
+      overflow:hidden;
+      } 
+    </style>
+
   </head>
-  <body>
-    <h2>Game</h2>
-    <div id='game'></div>
-    <h2>Info</h2>
-    <div id='info'></div>
+
+  <body class="body">
+
+    <!--.These are populated with react.-->
+      <div class="left" id="game">
+        <h2>Game</h2>
+      </div>
+      <div class="right" id="info">
+        <h2>Info</h2>
+      </div>
+
     <script src="static/bundle.js"></script>
   </body>
 </html>

@@ -4,12 +4,12 @@ import RankSymbol from './RankSymbol.jsx';
 import { Colors, Dimensions, CardsLayouts } from '../../constants';
 
 const Pile = ({ children, isOver, canDrop, color }) => {
-    let top = -5;
+    let top = -25; //here you can change the overlap
 
     const cards = React.Children.map(children, (element, index) => {
         const previousElement = children[index - 1];
         const wasUpturned = previousElement && previousElement.props.upturned;
-        top += wasUpturned ? 15 : 5;
+        top += 25; //here you can change the overlap
         return React.cloneElement(
             element,
             { style: {

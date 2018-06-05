@@ -13,7 +13,8 @@ const Card =
     let suitSymbols;
     let rankSymbol;
     let _style = prefixer({
-        background: upturned ? Colors.Card.upturned : Colors.Card.downturned,
+        //background: upturned ? Colors.Card.upturned : Colors.Card.downturned,
+        background: Colors.Card.upturned,
         borderRadius: Dimensions.Card.borderRadius,
         boxShadow: Shadows.Level1,
         boxSizing: 'border-box',
@@ -23,12 +24,13 @@ const Card =
         position: 'relative',
         width: Dimensions.Card.width,
         height: Dimensions.Card.height,
-        cursor: upturned ? 'grab' : 'inherit',
+        //cursor: upturned ? 'grab' : 'inherit',
+        cursor: 'grab',
         userSelect: 'none',
         transition: 'all 250ms',
         ...style
     });
-    if (!upturned) { return <div style={_style}><ReactSymbol color={Colors.React} /></div>; }
+
     if (!rank || !suit) { return <span />; }
 
     if (isMouseOver) {
@@ -61,7 +63,6 @@ const Card =
 Card.propTypes = {
     rank: T.oneOf(Ranks),
     suit: T.oneOf(Object.keys(Suits)),
-    upturned: T.bool
 };
 
 export default Card;

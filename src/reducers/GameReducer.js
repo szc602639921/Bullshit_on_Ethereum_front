@@ -54,18 +54,11 @@ function upturnFirstCard(cards) {
  * @return {Boolean}      True if moving more than one card from one pile to
  *                        another, false otherwise.
  */
-function movingMultipleCardsFromPileToPile(where, cards) {
-    return first(where.from) === Places.PILE &&
-           first(where.to) === Places.PILE &&
-           !first(cards).isLast;
-}
 
 function moveCards(state, action) {
     let { cards, where } = action.payload;
     let source = state.getIn(where.from)
-    if (movingMultipleCardsFromPileToPile(where, cards)) {
-        cards = source.slice(first(cards).index);
-    }
+
     const target = state.getIn(where.to).concat(cards);
     source = source.slice(0, -cards.length);
 
@@ -76,21 +69,6 @@ function moveCards(state, action) {
         .updateIn(where.from, value => source);
 }
 
-function turnCard(state, action) {
-    let deck = Map();
-    const upturnedCards = state.getIn([Places.DECK, 'upturned']);
-    const downturnedCards = state.getIn([Places.DECK, 'downturned']);
-    if (downturnedCards.isEmpty()) {
-        deck = deck.set('downturned', List(upturnedCards));
-        deck = deck.set('upturned', List());
-    } else {
-        deck = deck.set('downturned', downturnedCards.shift());
-        deck = deck.set('upturned', upturnedCards.push(downturnedCards.first()));
-    }
-
-    return state.set(Places.DECK, deck);
-}
-
 export default function game(
     
     state = getInitialState(shuffle(OrderedDeck)),
@@ -99,8 +77,6 @@ export default function game(
     switch (action.type) {
     case ActionTypes.MOVE_CARD:
         return moveCards(state, action);
-    case ActionTypes.TURN_CARD:
-        return turnCard(state, action);
     default:
         return state;
     }

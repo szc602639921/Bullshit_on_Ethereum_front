@@ -37,7 +37,6 @@ class SmartPile extends React.Component {
             {
                 rank: T.oneOf(Ranks),
                 suit: T.oneOf(Object.keys(Suits)),
-                upturned: T.bool
             }
         ))
     }
@@ -53,7 +52,6 @@ class SmartPile extends React.Component {
         const { cards } = this.props;
         const { connectDropTarget, canDrop, isOver, suit } = this.props;
         const renderedCards = cards.map((card, index, array) => {
-            if (card.upturned) {
                 return (
                     <DraggableCard {...card}
                         isLast={index === array.length - 1}
@@ -63,9 +61,6 @@ class SmartPile extends React.Component {
                         where={['PILE', this.props.index]}
                     />
                 );
-            } else {
-                return <Card {...card} key={card.suit + card.rank} />
-            }
         });
         return connectDropTarget(
             <div>

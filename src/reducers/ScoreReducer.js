@@ -3,7 +3,7 @@ import first from 'lodash/first';
 
 const Points = {
     [Places.DECK]: {
-        [Places.PILE]: 5,
+        [Places.PILE]: 10,
         [Places.FOUNDATION]: 10
     },
     [Places.PILE]: {

@@ -31,7 +31,7 @@ const Foundation = ({ children, suit, isOver, canDrop }) => {
                 fontSize: 40,
                 cursor: 'default'
             }}>
-                {Suits[suit]}
+                (^_^)
             </div>
             {children}
         </div>

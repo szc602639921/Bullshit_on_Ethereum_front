@@ -37,7 +37,7 @@ class Info extends React.Component {
     render() {
         eth.isGameFull("test", setIsFull);
         return (
-            ""
+            <h2>Info:</h2>
         );
     }
 }
