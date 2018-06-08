@@ -4,7 +4,6 @@ class EthWrapper{
 
     constructor(){
         var Web3 = require('web3');
-        console.log("what is web3 right now: " + window.web3);
         // Is there an injected web3 instance?
         if (typeof web3 !== 'undefined') {
             this.web3 = new Web3(web3.currentProvider);

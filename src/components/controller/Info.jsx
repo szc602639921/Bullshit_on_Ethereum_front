@@ -8,53 +8,86 @@ import { Colors, Dimensions, Abi } from '../../constants';
 import Card from '../display/Card.jsx';
 import EthWrapper from './EthWrapper.jsx'
 
+//web3 control
 var eth;
-
-function setEthAcc(newaccounts){
-    var p = document.createElement('p')
-    p.innerHTML = "Players "+newaccounts
-    document.body.appendChild(p)
-}
-
-function setIsFull(isFull){
-    var p = document.createElement('p')
-    p.innerHTML = "Is Full: "+isFull
-    document.body.appendChild(p)
-}
 
 @connect((state) => {
     eth = new EthWrapper();
     if(!eth) console.log("Could not establish web3 connection!");
-    eth.getPlayers("test", setEthAcc);
     return new Object();
 })
 
-//WEB STUFF
-
+//Info Class that controls ethwrapper and game components
 @DragDropContext(HTML5Backend)
 class Info extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {value: '', submit: false};
-
+        //use states so site refreshes on state change
+        this.state = {
+            //game control instances
+            joinedGame: false,
+            players: '',
+            isFull: false,
+            gameName: ''
+        };
+        //bind to pass this
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.isSubmit = this.isSubmit.bind(this);
+        this.isFull = this.isFull.bind(this);
+        this.setPlayers = this.setPlayers.bind(this);
+        this.poll = this.poll.bind(this);
+        //start timer
+        this.timer = setInterval(this.poll, 500);
+    }
+
+    setPlayers(newaccounts){
+        this.setState({
+            players: newaccounts
+          });
+    }
+
+    isFull(stateFull){
+        if(stateFull == this.state.isFull) return;
+        this.setState({
+            isFull: stateFull
+          });
+    }
+
+    isSubmit(accounts){
+        this.setState({
+            joinedGame: true
+          });
+        console.log("Joined Game succesfully");
+    }
+
+    poll(){
+        if(this.state.joinedGame){
+            console.log("I am polling!");
+            eth.isGameFull(this.state.gameName, this.setIsFull);
+            eth.getPlayers(this.state.gameName, this.setPlayers);
+        }      
     }
 
     handleChange(event) {
-        this.setState({value: event.target.value});
-      }
+        //this triggers a state change with rendering afterwards
+        this.setState({
+            gameName: event.target.value
+          });
+    }
 
     handleSubmit(event) {
+        //join game
+        eth.joinGame(this.state.gameName, this.isSubmit); 
+        //prevent refresh
         event.preventDefault();
-        eth.joinGame(this.state.value, console.log);
-        this.setState({submit: true});
-      }
+    }
+
     
     render() {
         //already joined a game
-        if(!this.state.submit){
+        if(!this.state.joinedGame){
             return (
                 <div>
                 <h2>Controls:</h2>
@@ -63,8 +96,7 @@ class Info extends React.Component {
                     <br/>
                 <form onSubmit={this.handleSubmit}>
                     <label>
-                        GameName:
-                        <input type="text" name={this.state.value} onChange={this.handleChange}/>
+                        <input type="text" name={this.state.gameName} onChange={this.handleChange}/>
                     </label>
                     <input type="submit" value="Join"/>
                 </form>
@@ -72,21 +104,29 @@ class Info extends React.Component {
                 </div>
             );
         }
-        
         else{
             return (
                 <div>
-                <h2>Controls:</h2>
+                <h2>Info:</h2>
                 Gamestate: Waiting for other Players
                 <br/>
-                <br/>
                 <label>
-                GameName: {this.state.value}
+                Game Name: {this.state.gameName}
+                <br/>
+                Game Full: {this.state.isFull}
                 <br/>
                 Players: 
+                <br/>
+                {this.state.players[0]}
+                <br/>
+                {this.state.players[1]}
+                <br/>
+                {this.state.players[2]}
+                <br/>
+                {this.state.players[3]}
+                <br/>
+                {this.state.players[4]}
                 </label>
-
-                <h2>Info:</h2>
                 </div>
             );
         }
