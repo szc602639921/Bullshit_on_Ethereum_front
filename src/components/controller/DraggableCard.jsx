@@ -39,11 +39,13 @@ const cardTarget = {
 
         const { suit, rank } = props;
 
+        //this handles card dropping
+
         if (destination === Places.FOUNDATION) {
             return draggedCard.suit === suit &&
                RanksValues[draggedCard.rank] === RanksValues[rank] + 1
-               && ( (draggedCard.where[0] === Places.PILE && draggedCard.isLast )
-                    || draggedCard.where[0] === Places.DECK);
+               && ( (draggedCard.where[draggedCard.index] === Places.PILE)
+                    || draggedCard.where[draggedCard.index] === Places.DECK);
         } else if (destination === Places.PILE) {
             return props.isLast && Colors[draggedCard.suit] !== Colors[suit] &&
                 RanksValues[draggedCard.rank] === RanksValues[rank] - 1;
@@ -81,7 +83,8 @@ export default class DraggableCard extends React.Component {
         dispatch(
             ActionCreators.moveCard(
                 [card],
-                { from: card.where, to: this.props.where }
+                { from: card.where, to: this.props.where },
+                2
             )
         );
 

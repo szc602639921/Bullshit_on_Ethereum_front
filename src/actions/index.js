@@ -1,9 +1,9 @@
 import { ActionTypes } from '../constants';
 
-export function moveCard(cards, where) {
+export function moveCard(cards, where, index) {
     return {
         type: ActionTypes.MOVE_CARD,
-        payload: { cards, where }
+        payload: { cards, where, index }
      };
 }
 

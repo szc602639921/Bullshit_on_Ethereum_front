@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import ActionCreators from '../../actions';
 import { Colors, Dimensions, Abi } from '../../constants';
 import Card from '../display/Card.jsx';
-import EthWrapper from './EthWrapper.jsx'
+import EthWrapper from './EthWrapper.jsx';
 
 //web3 control
 var eth;

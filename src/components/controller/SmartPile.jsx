@@ -14,8 +14,7 @@ const pileTarget = {
     },
 
     canDrop(props, monitor, component) {
-        const { rank } = monitor.getItem();
-        return rank === last(Ranks) && props.cards.length === 0;
+        return false;
     }
 };
 
@@ -44,7 +43,8 @@ class SmartPile extends React.Component {
     moveCards = (card) => {
         this.props.moveCards(
             [card],
-            { from: card.where, to: ['PILE', this.props.index] }
+            { from: card.where, to: ['PILE', this.props.index] },
+            2
         );
     }
 

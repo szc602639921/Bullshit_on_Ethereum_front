@@ -39,7 +39,8 @@ export default class SmartFoundation extends React.Component {
     moveCards = (card) => {
         this.props.moveCards(
             [card],
-            { from: card.where, to: ['FOUNDATION', this.props.suit] }
+            { from: card.where, to: ['FOUNDATION', this.props.suit] },
+            card.index
         );
     }
 

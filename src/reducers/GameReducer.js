@@ -43,26 +43,16 @@ function upturnFirstCard(cards) {
     });
 }
 
-/**
- * Returns true if the player is moving more than one card from one pile to
- * another, false otherwise.
- *
- * @param  {Object} where Object describing:
- *                            .to: where the cards are going to
- *                            .from: where the cards come from
- * @param  {Array} cards  The array of cards to be moved.
- * @return {Boolean}      True if moving more than one card from one pile to
- *                        another, false otherwise.
- */
-
+//this handles moving from pile to foundation
+//and removing from pile
+//so i reworked it to remove the right card
 function moveCards(state, action) {
-    let { cards, where } = action.payload;
+    let { cards, where, index } = action.payload;
     let source = state.getIn(where.from)
 
     const target = state.getIn(where.to).concat(cards);
-    source = source.slice(0, -cards.length);
-
-    if (first(where.from) === Places.PILE) source = upturnFirstCard(source);
+    console.log('Index is:'+index);
+    source = source.remove(index);
 
     return state
         .updateIn(where.to, value => target)

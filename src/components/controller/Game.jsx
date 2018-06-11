@@ -23,14 +23,9 @@ function MyCard (rank, suit) {
 @DragDropContext(HTML5Backend)
 class Game extends React.Component {
 
-    turnCard = () => {
+    moveCards = (cards, where, index) => {
         const { dispatch } = this.props;
-        dispatch(ActionCreators.turnCard());
-    }
-
-    moveCards = (cards, where) => {
-        const { dispatch } = this.props;
-        dispatch(ActionCreators.moveCard(cards, where));
+        dispatch(ActionCreators.moveCard(cards, where, index));
     }
 
     render() {
