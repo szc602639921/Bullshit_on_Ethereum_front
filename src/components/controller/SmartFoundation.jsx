@@ -13,9 +13,6 @@ const foundationTarget = {
     },
 
     canDrop(props, monitor, component) {
-        //const { suit, rank } = monitor.getItem();
-        //const firstCard = first(props.cards);
-        //return suit === props.suit && firstCard === undefined && rank === 'A';
         return true;
     }
 };
@@ -36,12 +33,16 @@ export default class SmartFoundation extends React.Component {
         suit: T.oneOf(Object.keys(Suits))
     }
 
+    //works on the move event to the foundation
     moveCards = (card) => {
         this.props.moveCards(
             [card],
             { from: card.where, to: ['FOUNDATION', this.props.suit] },
             card.index
         );
+        console.log("Dropped card "+card.rank);
+        //card was dropped, now send it to the blockchain
+        
     }
 
     render() {
