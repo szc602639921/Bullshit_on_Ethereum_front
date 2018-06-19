@@ -2,59 +2,56 @@ import Abi from '../../../../streebog/build/contracts/Game.json';
 
 class EthWrapper{
 
-    constructor(){
-        this.GameName = '';
-    }
-
     getAccounts(callback){
         EthWrapper.web3.eth.getAccounts().then(callback);
     }
 
     getCurrentPlayers(callback){
-        EthWrapper.gameContract.methods.getPlayers(this.GameName).call().then(callback);
+        EthWrapper.gameContract.methods.getPlayers(EthWrapper.GameName).call().then(callback);
     }
 
     getDealer(callback){
-        EthWrapper.gameContract.methods.getDealer(this.GameName).call().then(callback);
+        EthWrapper.gameContract.methods.getDealer(EthWrapper.GameName).call().then(callback);
     }
 
     playCard(cardHash, callback){
-        EthWrapper.gameContract.methods.playCard(cardHash).call().then(callback);
+        EthWrapper.gameContract.methods.playCard(EthWrapper.GameName, cardHash).send({from:EthWrapper.account, gas:3000000});
     }
 
     claimLie(callback){
-        EthWrapper.gameContract.methods.claimLie(this.GameName).call().then(callback);
+        EthWrapper.gameContract.methods.claimLie(EthWrapper.GameName).call().then(callback);
     }
     
     dealCards(cards, callback){
-        EthWrapper.gameContract.methods.dealCards(cards).call().then(callback);
+        EthWrapper.gameContract.methods.dealCards(EthWrapper.GameName, cards).send({from:EthWrapper.account, gas:3000000}).then(callback);
     }
 
     getCards(callback){
-        EthWrapper.gameContract.methods.getCards(this.GameName).call().then(callback);
+        EthWrapper.gameContract.methods.getCards(EthWrapper.GameName).call().then(callback);
     }
 
     retrieveNonces(nonce, callback){
-        EthWrapper.gameContract.methods.retrieveNonces(nonce).call().then(callback);
+        EthWrapper.gameContract.methods.retrieveNonces(EthWrapper.GameName, nonce).call().then(callback);
     }
 
     isGameFull(callback){
-        EthWrapper.gameContract.methods.isGameFull(this.GameName).call().then(callback);
+        EthWrapper.gameContract.methods.isGameFull(EthWrapper.GameName).call().then(callback);
     }
 
     joinGame(gameName, callback){
-        this.GameName = 'test';
-        console.log("Joining game "+this.GameName+' with account '+EthWrapper.account);
-        EthWrapper.gameContract.methods.join(3).send({from:EthWrapper.account, gas:3000000}).then(callback);
+        EthWrapper.GameName = gameName;
+        console.log("Joining game "+EthWrapper.GameName+' with account '+EthWrapper.account);
+        EthWrapper.gameContract.methods.join(EthWrapper.GameName, 2).send({from:EthWrapper.account, gas:3000000}).then(callback);
     }
 
     takeCardsOnTable(callback){
-        EthWrapper.gameContract.methods.takeCardsOnTable(this.GameName).send({from:EthWrapper.account, gas:3000000}).then(callback);
+        EthWrapper.gameContract.methods.takeCardsOnTable(EthWrapper.GameName).send({from:EthWrapper.account, gas:3000000}).then(callback);
     }
 }
 
 //static variables
 EthWrapper.account = '0x0';
+EthWrapper.GameName = 'test';
 
 //Initialize WEB3
 var Web3 = require('web3');

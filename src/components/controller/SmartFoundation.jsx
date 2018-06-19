@@ -6,6 +6,7 @@ import DraggableCard from './DraggableCard.jsx';
 import first from 'lodash/first';
 import { Suits } from '../../constants';
 import { DropTarget } from 'react-dnd';
+import EthWrapper from './EthWrapper.jsx';
 
 const foundationTarget = {
     drop(props, monitor, component) {
@@ -43,8 +44,8 @@ export default class SmartFoundation extends React.Component {
         console.log("Dropped card "+card.rank);
         //card was dropped, now send it to the blockchain
         var ethWrapper = new EthWrapper();
-        ethWrapper.playCard('33', console.log);
-        ethWrapper.takeCardsOnTable(console.log);
+        ethWrapper.playCard(33, console.log);
+        //ethWrapper.takeCardsOnTable(console.log);
     }
 
     render() {

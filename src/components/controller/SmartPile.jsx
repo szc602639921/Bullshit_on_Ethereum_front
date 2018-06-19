@@ -10,7 +10,7 @@ import last from 'lodash/last';
 
 const pileTarget = {
     drop(props, monitor, component) {
-        //component.moveCards(monitor.getItem());
+        component.moveCards(monitor.getItem());
     },
 
     canDrop(props, monitor, component) {

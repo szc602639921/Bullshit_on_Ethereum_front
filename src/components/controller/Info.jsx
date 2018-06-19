@@ -65,8 +65,8 @@ class Info extends React.Component {
     poll(){
         if(this.state.joinedGame){
             console.log("I am polling!");
-            eth.isGameFull(this.state.gameName, this.setIsFull);
-            eth.getCurrentPlayers(this.state.gameName, this.setPlayers);
+            eth.isGameFull(this.setIsFull);
+            eth.getCurrentPlayers(this.setPlayers);
         }      
     }
 
