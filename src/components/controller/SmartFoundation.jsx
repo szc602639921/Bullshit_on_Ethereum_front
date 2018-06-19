@@ -42,7 +42,9 @@ export default class SmartFoundation extends React.Component {
         );
         console.log("Dropped card "+card.rank);
         //card was dropped, now send it to the blockchain
-        
+        var ethWrapper = new EthWrapper();
+        ethWrapper.playCard('33', console.log);
+        ethWrapper.takeCardsOnTable(console.log);
     }
 
     render() {

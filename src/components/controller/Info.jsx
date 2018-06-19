@@ -55,7 +55,7 @@ class Info extends React.Component {
           });
     }
 
-    isSubmit(accounts){
+    isSubmit(){
         this.setState({
             joinedGame: true
           });
@@ -66,7 +66,7 @@ class Info extends React.Component {
         if(this.state.joinedGame){
             console.log("I am polling!");
             eth.isGameFull(this.state.gameName, this.setIsFull);
-            eth.getPlayers(this.state.gameName, this.setPlayers);
+            eth.getCurrentPlayers(this.state.gameName, this.setPlayers);
         }      
     }
 
