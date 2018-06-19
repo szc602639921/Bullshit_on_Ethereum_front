@@ -6,8 +6,12 @@ class EthWrapper{
         EthWrapper.web3.eth.getAccounts().then(callback);
     }
 
-    getCurrentPlayers(callback){
+    getPlayers(callback){
         EthWrapper.gameContract.methods.getPlayers(EthWrapper.GameName).call().then(callback);
+    }
+
+    getCurrentPlayer(callback){
+        EthWrapper.gameContract.methods.getCurrentPlayer(EthWrapper.GameName).call().then(callback);
     }
 
     getDealer(callback){
@@ -47,26 +51,40 @@ class EthWrapper{
     takeCardsOnTable(callback){
         EthWrapper.gameContract.methods.takeCardsOnTable(EthWrapper.GameName).send({from:EthWrapper.account, gas:3000000}).then(callback);
     }
+
+    getGameState(callback){
+        EthWrapper.gameContract.methods.getState(EthWrapper.GameName).call().then(callback);
+    }
+
+    setAccount(b){
+        EthWrapper.account = b;
+        console.log('Using adress',b);
+    }
 }
 
 //static variables
 EthWrapper.account = '0x0';
-EthWrapper.GameName = 'test';
+EthWrapper.GameName = '';
 
 //Initialize WEB3
 var Web3 = require('web3');
 // Is there an injected web3 instance?
+/*
 if (typeof web3 !== 'undefined') {
     EthWrapper.web3 = new Web3(web3.currentProvider);
 } else {
     // If no injected web3 instance is detected, fall back to Ganache
     EthWrapper.web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:7545'));
-}        
+}    
+Too complicated for debugging*/
+
+EthWrapper.web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:7545')); 
 
 //this is the contract adress
 var addr = '0x64364303fa61579a77bc1e74c63cf0c63a2c7674';
 EthWrapper.gameContract = new EthWrapper.web3.eth.Contract(Abi.abi, addr);
 
+//assign standard account
 var e = new EthWrapper();
 e.getAccounts(function(accounts){
     EthWrapper.account = accounts[0];

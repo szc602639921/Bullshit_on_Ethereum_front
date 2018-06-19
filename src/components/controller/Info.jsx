@@ -7,13 +7,15 @@ import ActionCreators from '../../actions';
 import { Colors, Dimensions, Abi } from '../../constants';
 import Card from '../display/Card.jsx';
 import EthWrapper from './EthWrapper.jsx';
+import Dropdown from './Dropdown.jsx';
+import GameLogic from './GameLogic';
 
 //web3 control
-var eth;
+var eth, gameLogic;
+
 
 @connect((state) => {
     eth = new EthWrapper();
-    if(!eth) console.log("Could not establish web3 connection!");
     return new Object();
 })
 
@@ -29,7 +31,11 @@ class Info extends React.Component {
             joinedGame: false,
             players: '',
             isFull: false,
-            gameName: ''
+            gameName: '',
+            accounts: [],
+            chosenAccount: '',
+            gameState: '',
+            curPlayer: '-1',
         };
         //bind to pass this
         this.handleChange = this.handleChange.bind(this);
@@ -37,9 +43,19 @@ class Info extends React.Component {
         this.isSubmit = this.isSubmit.bind(this);
         this.isFull = this.isFull.bind(this);
         this.setPlayers = this.setPlayers.bind(this);
+        this.setAccounts = this.setAccounts.bind(this);
         this.poll = this.poll.bind(this);
         //start timer
-        this.timer = setInterval(this.poll, 500);
+        this.timer = setInterval(this.poll, 1000);
+
+        eth.getAccounts(this.setAccounts);
+    }
+
+    setAccounts(newaccounts){
+        this.setState({
+            accounts: newaccounts,
+            chosenAccount: newaccounts[0]
+        });
     }
 
     setPlayers(newaccounts){
@@ -59,15 +75,25 @@ class Info extends React.Component {
         this.setState({
             joinedGame: true
           });
+        gameLogic = new GameLogic(eth);
         console.log("Joined Game succesfully");
     }
 
     poll(){
         if(this.state.joinedGame){
-            console.log("I am polling!");
+            //console.log("I am polling!");
             eth.isGameFull(this.setIsFull);
-            eth.getCurrentPlayers(this.setPlayers);
-        }      
+            eth.getPlayers(this.setPlayers);
+
+            var g = gameLogic.getGameState();
+            var p = gameLogic.getPlayer();
+            console.log('Gamestate is',g); 
+            console.log('Curplayer is',p);  
+            this.setState({
+                gameState: g,
+                curPlayer: p
+              });
+        }
     }
 
     handleChange(event) {
@@ -75,6 +101,7 @@ class Info extends React.Component {
         this.setState({
             gameName: event.target.value
           });
+
     }
 
     handleSubmit(event) {
@@ -90,17 +117,18 @@ class Info extends React.Component {
         if(!this.state.joinedGame){
             return (
                 <div>
-                <h2>Controls:</h2>
-                Join a Game!
-                    <br/>
-                    <br/>
-                <form onSubmit={this.handleSubmit}>
-                    <label>
-                        <input type="text" name={this.state.gameName} onChange={this.handleChange}/>
-                    </label>
-                    <input type="submit" value="Join"/>
-                </form>
-                <h2>Info:</h2>
+                    <h2>Join a game!</h2>
+                    <Dropdown
+                        name={this.state.chosenAccount}
+                        list={this.state.accounts}
+                        callback={eth.setAccount}
+                    />
+                    <form onSubmit={this.handleSubmit}>
+                        <label>
+                            <input type="text" name={this.state.gameName} onChange={this.handleChange} />
+                        </label>
+                        <input type="submit" value="Join" />
+                    </form>
                 </div>
             );
         }
@@ -108,24 +136,28 @@ class Info extends React.Component {
             return (
                 <div>
                 <h2>Info:</h2>
-                Gamestate: Waiting for other Players
-                <br/>
                 <label>
                 Game Name: {this.state.gameName}
                 <br/>
-                Game Full: {this.state.isFull}
+                Gamestate:{this.state.gameState}
+                <br/>
+                Current Player: {this.state.curPlayer}
                 <br/>
                 Players: 
+                <label/>
+                
                 <br/>
-                {this.state.players[0]}
+
                 <br/>
-                {this.state.players[1]}
+                0. {this.state.players[0]}
                 <br/>
-                {this.state.players[2]}
+                1. {this.state.players[1]}
                 <br/>
-                {this.state.players[3]}
+                2. {this.state.players[2]}
                 <br/>
-                {this.state.players[4]}
+                3. {this.state.players[3]}
+                <br/>
+                4. {this.state.players[4]}
                 </label>
                 </div>
             );
