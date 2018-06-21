@@ -8,7 +8,6 @@ import { connect } from 'react-redux';
 import ActionCreators from '../../actions';
 import { Colors, Dimensions } from '../../constants';
 import Card from '../display/Card.jsx';
-import EthWrapper from './EthWrapper.jsx'
 
 function MyCard (rank, suit) {
     this.rank = rank;
@@ -17,11 +16,16 @@ function MyCard (rank, suit) {
 }
 
 @connect((state) => { 
-    return { game: state.game.toJS(), score: state.score } 
+    return { game: state.game.toJS(), score: state.score} 
 })
 
 @DragDropContext(HTML5Backend)
 class Game extends React.Component {
+
+    constructor(props) {
+        super(props);
+        //console.log('Props are ',props);
+    }
 
     moveCards = (cards, where, index) => {
         const { dispatch } = this.props;
@@ -48,21 +52,30 @@ class Game extends React.Component {
                     justifyContent: 'space-between',
                     width: '70%',
                     marginTop: 40
-                }}>
+                }}> 
+                    <div>    
                         <h2>Current Card</h2>
                         <Card
                             rank={"A"}
                             suit={"SPADES"}
                             upturned={true}
                         />
-
-                        <h2>Your Card</h2>
-                        <SmartFoundation
-                            suit="HEARTS"
-                            cards={game.FOUNDATION.HEARTS}
-                            moveCards={moveCards}
-                        />
-                        
+                     </div>
+                        {this.props.myTurn ? (
+                            <div>                      
+                            <h2>It's your turn!</h2>
+                            <SmartFoundation
+                                suit="HEARTS"
+                                cards={game.FOUNDATION.HEARTS}
+                                moveCards={moveCards}
+                            />
+                            </div>
+                            )
+                            :
+                            (
+                                <h2>Waiting for {this.props.curPlayer}</h2>
+                            )
+                        }
                 </div>
                 <h2>Your Deck</h2>
                 <div style={{
