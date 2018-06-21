@@ -82,12 +82,10 @@ class Core extends React.Component {
                 console.log('DEAL');
                 break;
             case '2':
-                if(!this.state.myTurn){
-                    if(!this.retrievedCards){
-                        console.log('Retrieving my Cards!');
-                        this.retrievedCards = true;
-                        eth.getCards(this.setCards);                  
-                    }
+                if(!this.retrievedCards){
+                    console.log('Retrieving my Cards!');
+                    this.retrievedCards = true;
+                    eth.getCards(this.setCards);                  
                 }
                 break;
             case '3':
