@@ -83,26 +83,22 @@ class Info extends React.Component {
                 <label>
                 Game Name: {this.props.gameName}
                 <br/>
+                Your Address: {this.props.myAdress}
+                <br/>
                 Gamestate:{this.props.curGameState}
                 <br/>
                 Current Player: {this.props.curPlayer}
                 <br/>
+                <br/>
                 Players: 
                 <label/>
-                
-                <br/>
 
                 <br/>
-                0. {this.props.playerArray[0]}
-                <br/>
-                1. {this.props.playerArray[1]}
-                <br/>
-                2. {this.props.playerArray[2]}
-                <br/>
-                3. {this.props.playerArray[3]}
-                <br/>
-                4. {this.props.playerArray[4]}
-                <br/>
+                {this.props.playerArray[0]!=0 ? (<div>0. {this.props.playerArray[0]}</div>):(<div></div>)}
+                {this.props.playerArray[1]!=0 ? (<div>1. {this.props.playerArray[1]}</div>):(<div></div>)}
+                {this.props.playerArray[2]!=0 ? (<div>2. {this.props.playerArray[2]}</div>):(<div></div>)}
+                {this.props.playerArray[3]!=0 ? (<div>3. {this.props.playerArray[3]}</div>):(<div></div>)}
+                {this.props.playerArray[4]!=0 ? (<div>4. {this.props.playerArray[4]}</div>):(<div></div>)}
                 </label>
                 </div>
             );

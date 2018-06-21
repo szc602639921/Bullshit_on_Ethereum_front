@@ -64,6 +64,10 @@ class EthWrapper{
     getAccount(){
         return EthWrapper.account;
     }
+
+    getPlayerId(callback){
+        EthWrapper.gameContract.methods.getPlayerId(EthWrapper.GameName, EthWrapper.account).call().then(callback);
+    }
 }
 
 //static variables

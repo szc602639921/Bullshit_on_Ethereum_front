@@ -52,13 +52,15 @@ class Game extends React.Component {
                     justifyContent: 'space-between',
                     width: '70%',
                     marginTop: 40
-                }}>
+                }}> 
+                    <div>    
                         <h2>Current Card</h2>
                         <Card
                             rank={"A"}
                             suit={"SPADES"}
                             upturned={true}
                         />
+                     </div>
                         {this.props.myTurn ? (
                             <div>                      
                             <h2>It's your turn!</h2>
@@ -71,7 +73,7 @@ class Game extends React.Component {
                             )
                             :
                             (
-                                <h2>Waiting for player {this.props.curPlayer}</h2>
+                                <h2>Waiting for {this.props.curPlayer}</h2>
                             )
                         }
                 </div>

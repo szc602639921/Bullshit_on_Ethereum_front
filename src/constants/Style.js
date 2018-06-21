@@ -41,7 +41,7 @@ export const Dimensions = {
     },
 
     Game: {
-        width: 957,
+        width: 1000,
         height: 800
     }
 }

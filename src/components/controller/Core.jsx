@@ -27,20 +27,22 @@ class Core extends React.Component {
             accounts: [],
             chosenAccount: '',
             gameName: "",
-            curPlayer: "to join",
-            myTurn : false,
+            curPlayer: "",
+            myTurn: false,
             playerArray : [],
             curGameState : -1,
-            curGameStateText: ''
+            curGameStateText: '',
+            myPlayerId: -1
         };
         //bind callbacks
         this.setAccounts = this.setAccounts.bind(this);
         this.setMyAccount = this.setMyAccount.bind(this);
-        this.setPlayers = this.setPlayers.bind(this);
+        this.setPlayerArray = this.setPlayerArray.bind(this);
         this.setPlayer = this.setPlayer.bind(this);
         this.joinGame = this.joinGame.bind(this);
         this.update = this.update.bind(this);
         this.setGameState = this.setGameState.bind(this);
+        this.setPlayerId = this.setPlayerId.bind(this);
 
         //Now pull accounts
         eth.getAccounts(this.setAccounts);
@@ -50,9 +52,10 @@ class Core extends React.Component {
     }
 
     update(){
+        if(this.state.gameName === '') return;
         //Poll everything the game needs to know
         eth.getGameState(this.setGameState);
-        eth.getPlayers(this.setPlayers);
+        eth.getPlayers(this.setPlayerArray);
         eth.getCurrentPlayer(this.setPlayer);
 
         //Check if it has ended
@@ -78,7 +81,13 @@ class Core extends React.Component {
         console.log('Joining game',this.state.gameName);
         callback();
     }
-    setPlayers(players){
+    setPlayerId(myID){
+        this.setState({
+            playerId: myID,
+          });
+          console.log('player id is ',myID);
+    }
+    setPlayerArray(players){
         this.setState({
             playerArray: players
           });   
@@ -86,6 +95,7 @@ class Core extends React.Component {
     }
     setPlayer(player){
         var myNewTurn = (this.state.playerArray[player] == eth.getAccount());
+        if(player==5) player='other players';
         this.setState({
             curPlayer: player,
             myTurn: myNewTurn
@@ -99,6 +109,7 @@ class Core extends React.Component {
           });   
           console.log(gS);   
     }
+    
     
 
     /**
@@ -156,6 +167,7 @@ class Core extends React.Component {
                 accounts = {this.state.accounts}
                 callback = {this.joinGame}
                 callbackAcc = {this.setMyAccount}
+                myAdress = {eth.getAccount()}
               />
             </div>
             </div>
