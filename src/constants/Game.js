@@ -25,15 +25,15 @@ export const RanksValues = {
 };
 export const ValuesRanks = {
     1: 'A',
-    2: 2,
-    3: 3,
-    4: 4,
-    5: 5,
-    6: 6,
-    7: 7,
-    8: 8,
-    9: 9,
-    10: 10,
+    2: '2',
+    3: '3',
+    4: '4',
+    5: '5',
+    6: '6',
+    7: '7',
+    8: '8',
+    9: '9',
+    10: '10',
     11: 'J',
     12: 'Q',
     13: 'K'
@@ -48,5 +48,33 @@ export const Places = {
 export const ActionTypes = {
     TURN_CARD: 'TURN_CARD',
     MOVE_CARD: 'MOVE_CARD'
-}
+};
 
+export const mapCard = (card)=>{
+    if (typeof card === 'object') {
+      if (card.suit == 'SPADES') {
+        return RanksValues[card.rank] + 0;
+      }
+      if (card.suit == 'HEARTS') {
+        return RanksValues[card.rank] + 13;
+      }
+      if (card.suit == 'DIAMONDS') {
+        return RanksValues[card.rank] + 26;
+      }
+      if (card.suit == 'CLUBS') {
+        return RanksValues[card.rank] + 39;
+      }
+    } else {
+      if (card <= 13) {
+        return {rank: ValuesRanks[card % 13] , suit: 'SPADES' };
+      }
+      if (card <= 26) {
+        return {rank: ValuesRanks[card % 13] , suit: 'HEARTS' };
+      }
+      if (card <= 39) {
+        return {rank: ValuesRanks[card % 13] , suit: 'DIAMONDS' };
+      }
+  
+      return {rank: ValuesRanks[card % 13] , suit: 'CLUBS' };
+    }
+  }

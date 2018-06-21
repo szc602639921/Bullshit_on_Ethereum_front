@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import ActionCreators from '../../actions';
 import { Colors, Dimensions } from '../../constants';
 import Card from '../display/Card.jsx';
+import {mapCard} from '../../constants/Game'
 
 function MyCard (rank, suit) {
     this.rank = rank;
@@ -25,6 +26,44 @@ class Game extends React.Component {
     constructor(props) {
         super(props);
         //console.log('Props are ',props);
+        this.piles = [[],[],[],[]];
+
+    }
+
+    splitCards(){
+        var cards = this.props.cards;
+        console.log(cards);
+        if(cards==[]) return;
+
+        //Remove '0' from cards
+        for(var i = cards.length - 1; i >= 0; i--) {
+            if(cards[i] === '0') {
+                cards.splice(i, 1);
+            }
+        }
+        console.log('Sorted array',cards);
+
+        //now split between piles
+        for(i=0;i<cards.length; i++){
+            console.log(cards[i]);
+            var c = mapCard(cards[i]);
+            console.log('cur card',c);
+            switch(c.suit){
+                case 'SPADES':
+                    this.piles[0].push(c);
+                    break;
+                case 'HEARTS':
+                    this.piles[1].push(c);
+                    break;
+                case 'CLUBS':
+                    this.piles[2].push(c);
+                    break;
+                case 'DIAMONDS':
+                    this.piles[3].push(c);
+                    break;
+            }
+        }
+        console.log(this.piles[0]);
     }
 
     moveCards = (cards, where, index) => {
@@ -35,11 +74,11 @@ class Game extends React.Component {
     render() {
         const { game, score } = this.props;
         const { moveCards, turnCard } = this;
-        var stack = [];
-        for(var i=1; i<6;i++){
-            //game.PILE[i] = [new MyCard(""+(i+2), "HEARTS")];
-            //console.log(new MyCard(""+(i+2), "HEARTS"));
-        }
+        this.splitCards();
+        game.PILE[0] = this.piles[0];
+        game.PILE[1] = this.piles[1];
+        game.PILE[2] = this.piles[2];
+        game.PILE[3] = this.piles[3];
 
         return (
             <div style={{

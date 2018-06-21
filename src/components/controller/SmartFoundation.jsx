@@ -1,41 +1,10 @@
 import React from 'react';
 import T from 'prop-types';
 import Foundation from '../display/Foundation.jsx';
-import ActionCreators, { Directions } from '../../actions';
 import DraggableCard from './DraggableCard.jsx';
-import first from 'lodash/first';
 import { Suits, RanksValues, ValuesRanks } from '../../constants';
 import { DropTarget } from 'react-dnd';
 import EthWrapper from './EthWrapper.jsx';
-
-function mapCard(card) {
-  if (typeof card === 'object') {
-    if (card.suit == 'SPADES') {
-      return RanksValues[card.rank] + 0;
-    }
-    if (card.suit == 'HEARTS') {
-      return RanksValues[card.rank] + 13;
-    }
-    if (card.suit == 'DIAMONDS') {
-      return RanksValues[card.rank] + 26;
-    }
-    if (card.suit == 'CLUBS') {
-      return RanksValues[card.rank] + 39;
-    }
-  } else {
-    if (card <= 13) {
-      return {rank: ValuesRanks[card % 13] , suit: 'SPADES' };
-    }
-    if (card <= 26) {
-      return {rank: ValuesRanks[card % 13] , suit: 'HEARTS' };
-    }
-    if (card <= 39) {
-      return {rank: ValuesRanks[card % 13] , suit: 'DIAMONDS' };
-    }
-
-    return {rank: ValuesRanks[card % 13] , suit: 'CLUBS' };
-  }
-}
 
 const foundationTarget = {
     drop(props, monitor, component) {

@@ -25,6 +25,7 @@ class Core extends React.Component {
         this.state = {
             //Game Statics
             accounts: [],
+            cards: [],
             chosenAccount: '',
             gameName: '',
             curPlayer: 'others to join',
@@ -43,11 +44,11 @@ class Core extends React.Component {
         this.update = this.update.bind(this);
         this.setGameState = this.setGameState.bind(this);
         this.setPlayerId = this.setPlayerId.bind(this);
+        this.setCards = this.setCards.bind(this);
 
         //local variables
         this.dealtCards = false;
         this.retrievedCards = false;
-        this.cards = []
 
         //Now pull accounts
         eth.getAccounts(this.setAccounts);
@@ -88,6 +89,7 @@ class Core extends React.Component {
                         eth.getCards(this.setCards);                  
                     }
                 }
+                break;
             case '3':
                 if(!this.state.myTurn) return;
                 //submitNonce();
@@ -133,12 +135,14 @@ class Core extends React.Component {
             curPlayer: gS[0],
             myTurn: myNewTurn
           });   
-        console.log(gS);   
+        //console.log(gS);   
     }
     //sets your initial card deck
-    setCards(cards){
-        console.log('Retrieved cards',cards);
-        this.cards = cards;
+    setCards(newCards){
+        this.setState({
+            cards: newCards
+          });   
+        console.log('Retrieved cards',newCards);
     }
 
     /**
@@ -222,6 +226,7 @@ class Core extends React.Component {
               <Game
                 myTurn = {this.state.myTurn}
                 curPlayer = {this.state.curPlayer}
+                cards = {this.state.cards}
               />
             </div>
             <div className={styles.right} id='info'>
