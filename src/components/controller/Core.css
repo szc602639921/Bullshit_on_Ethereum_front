@@ -1,0 +1,17 @@
+.body{
+    background:#4CAF50;
+  }
+  
+  #sides{
+  margin:0;
+  }
+  .left{
+  float:left;
+  width:50%;
+  overflow:hidden;
+  }
+  .right{
+  float:left;
+  width:50%;
+  overflow:hidden;
+  } 

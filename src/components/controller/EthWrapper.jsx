@@ -60,6 +60,10 @@ class EthWrapper{
         EthWrapper.account = b;
         console.log('Using adress',b);
     }
+
+    getAccount(){
+        return EthWrapper.account;
+    }
 }
 
 //static variables

@@ -34,7 +34,6 @@ class Dropdown extends Component {
         var v = b.target.value;
         this.props.callback(v);
         this.name = v;
-        this.forceUpdate()
     }
 
     render() {
