@@ -18,7 +18,7 @@ class EthWrapper{
         EthWrapper.gameContract.methods.getDealer(EthWrapper.GameName).call().then(callback);
     }
 
-    playCard(cardHash, callback){
+    playCard(cardHash){
         EthWrapper.gameContract.methods.playCard(EthWrapper.GameName, cardHash).send({from:EthWrapper.account, gas:3000000});
     }
 
@@ -26,8 +26,8 @@ class EthWrapper{
         EthWrapper.gameContract.methods.claimLie(EthWrapper.GameName).call().then(callback);
     }
     
-    dealCards(cards, callback){
-        EthWrapper.gameContract.methods.dealCards(EthWrapper.GameName, cards).send({from:EthWrapper.account, gas:3000000}).then(callback);
+    dealCards(cards){
+        EthWrapper.gameContract.methods.dealCards(EthWrapper.GameName, cards).send({from:EthWrapper.account, gas:3000000});
     }
 
     getCards(callback){
@@ -44,7 +44,7 @@ class EthWrapper{
 
     joinGame(gameName, callback){
         EthWrapper.GameName = gameName;
-        console.log("Joining game "+EthWrapper.GameName+' with account '+EthWrapper.account);
+        console.log('Joining game '+EthWrapper.GameName+' with account '+EthWrapper.account);
         EthWrapper.gameContract.methods.join(EthWrapper.GameName, 2).send({from:EthWrapper.account, gas:3000000}).then(callback);
     }
 
@@ -67,6 +67,10 @@ class EthWrapper{
 
     getPlayerId(callback){
         EthWrapper.gameContract.methods.getPlayerId(EthWrapper.GameName, EthWrapper.account).call().then(callback);
+    }
+
+    getCards(callback){
+        EthWrapper.gameContract.methods.getCards(EthWrapper.GameName).call().then(callback);
     }
 }
 

@@ -61,7 +61,7 @@ class Game extends React.Component {
                             upturned={true}
                         />
                      </div>
-                        {this.props.myTurn ? (
+                        {this.props.myTurn && this.props.gameState == 2 ? (
                             <div>                      
                             <h2>It's your turn!</h2>
                             <SmartFoundation

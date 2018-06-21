@@ -26,23 +26,28 @@ class Core extends React.Component {
             //Game Statics
             accounts: [],
             chosenAccount: '',
-            gameName: "",
-            curPlayer: "",
+            gameName: '',
+            curPlayer: 'others to join',
             myTurn: false,
             playerArray : [],
             curGameState : -1,
             curGameStateText: '',
-            myPlayerId: -1
+            myPlayerId: -1,
+            playerCount: 2
         };
         //bind callbacks
         this.setAccounts = this.setAccounts.bind(this);
         this.setMyAccount = this.setMyAccount.bind(this);
         this.setPlayerArray = this.setPlayerArray.bind(this);
-        this.setPlayer = this.setPlayer.bind(this);
         this.joinGame = this.joinGame.bind(this);
         this.update = this.update.bind(this);
         this.setGameState = this.setGameState.bind(this);
         this.setPlayerId = this.setPlayerId.bind(this);
+
+        //local variables
+        this.dealtCards = false;
+        this.retrievedCards = false;
+        this.cards = []
 
         //Now pull accounts
         eth.getAccounts(this.setAccounts);
@@ -55,19 +60,43 @@ class Core extends React.Component {
         if(this.state.gameName === '') return;
         //Poll everything the game needs to know
         eth.getGameState(this.setGameState);
-        eth.getPlayers(this.setPlayerArray);
-        eth.getCurrentPlayer(this.setPlayer);
+        //Poll player while joining
+        if(this.state.curGameState <=2) eth.getPlayers(this.setPlayerArray);
 
         //Check if it has ended
         if(this.state.curGameState == 5){
             //Announce winner
-            console.log("WINNER IS "+curPLayer);
+            alert('WINNER IS '+this.state.curPlayer);
         }
 
-        //Check if i need to do sth, else return
-
-        //It is my turn, check state
-
+        //Check if and what I have to do
+        switch(this.state.curGameState){
+            case '0':
+                break;
+            case '1':
+                if(!this.state.myTurn) return;
+                if(this.dealtCards) return;
+                this.dealtCards = true;
+                this.dealCards(this.state.playerCount);
+                console.log('DEAL');
+                break;
+            case '2':
+                if(!this.state.myTurn){
+                    if(!this.retrievedCards){
+                        console.log('Retrieving my Cards!');
+                        this.retrievedCards = true;
+                        eth.getCards(this.setCards);                  
+                    }
+                }
+            case '3':
+                if(!this.state.myTurn) return;
+                //submitNonce();
+                console.log('LIE');
+                break;
+            case '4':
+                console.log('REVEAL');
+                break;
+        }
     }
     
     /**
@@ -85,7 +114,7 @@ class Core extends React.Component {
         this.setState({
             playerId: myID,
           });
-          console.log('player id is ',myID);
+          //console.log('player id is ',myID);
     }
     setPlayerArray(players){
         this.setState({
@@ -93,23 +122,60 @@ class Core extends React.Component {
           });   
           //console.log(players);   
     }
-    setPlayer(player){
-        var myNewTurn = (this.state.playerArray[player] == eth.getAccount());
-        if(player==5) player='other players';
-        this.setState({
-            curPlayer: player,
-            myTurn: myNewTurn
-          });
-    }
+    //Pulls every important game information
     setGameState(gS){
-        var gStext = this.getGameStateText(gS);
+        var myNewTurn = (this.state.playerArray[gS[0]] == eth.getAccount());
+        if(gS[0]==5) gS[0]='other players';
+        var gStext = this.getGameStateText(gS[1]);
         this.setState({
-            curGameState: gS,
-            curGameStateText: gStext
+            curGameState: gS[1],
+            curGameStateText: gStext,
+            curPlayer: gS[0],
+            myTurn: myNewTurn
           });   
-          console.log(gS);   
+        console.log(gS);   
     }
-    
+    //sets your initial card deck
+    setCards(cards){
+        console.log('Retrieved cards',cards);
+        this.cards = cards;
+    }
+
+    /**
+     * Gameplay functions
+     */
+    shuffle(a) {
+        for (let i = a.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [a[i], a[j]] = [a[j], a[i]];
+        }
+        return a;
+    }
+    dealCards(playerAmount){
+        var deck = [];
+
+        for (var i = 0; i < 52; i++) {
+           deck.push(i);
+        }
+
+        deck = this.shuffle(deck)
+
+        var cards = [[],[],[],[],[]];
+
+        for (i = 0; deck.length > 0 ; (i = (i + 1) % playerAmount)) {
+          cards[i].push(deck.pop())
+        }
+
+        for(i=0; i<5; i++){
+            for (var j = 0; j < 52; j++) {
+                console.log(cards[i][j])
+                if(!cards[i][j]) cards[i][j]=0;
+            }
+        }
+
+        console.log(cards);
+        eth.dealCards(cards);
+    }
     
 
     /**
@@ -134,17 +200,17 @@ class Core extends React.Component {
     getGameStateText(gS){
         switch(gS){
             case '0':
-                return "JOIN";
-            case '4':
-                return "REVEAL";
-            case '2':
-                return "PLAY";
+                return 'JOIN';
             case '1':
-                return "DEAL";
+                return 'DEAL';
+            case '2':
+                return 'PLAY';
+            case '4':
+                return 'REVEAL';
             case '3':
-                return "LIE";
+                return 'LIE';
             case '5':
-                return "END";
+                return 'END';
         }
     }
 
@@ -152,13 +218,13 @@ class Core extends React.Component {
     render(){
         return(
             <div>
-            <div className={styles.left} id="game">
+            <div className={styles.left} id='game'>
               <Game
                 myTurn = {this.state.myTurn}
                 curPlayer = {this.state.curPlayer}
               />
             </div>
-            <div className={styles.right} id="info">
+            <div className={styles.right} id='info'>
               <Info
                 curPlayer = {this.state.curPlayer}
                 gameName = {this.state.gameName}

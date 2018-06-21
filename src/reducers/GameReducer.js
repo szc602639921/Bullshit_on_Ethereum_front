@@ -10,7 +10,7 @@ export const OrderedDeck = flatten(
     Object.keys(Suits).map(suit => Ranks.map(rank => ({ rank, suit })))
 );
 
-function getInitialState(cards) {
+function getInitialState() {
 
 
     return Map({
@@ -20,27 +20,18 @@ function getInitialState(cards) {
             DIAMONDS: List(),
             CLUBS: List()
         }),
-        [Places.PILE]: getPiles(cards),
+        [Places.PILE]: getPiles(),
         [Places.DECK]: Map({
-            upturned: List(cards.slice(-1)),
-            downturned: List(cards.slice(21, -1))
+            upturned: List(),
+            downturned: List()
         })
     });
 }
 
-function getPiles(cards) {
-    const deck = cards.slice();
+function getPiles() {
     return List(range(0, 6).map(index => {
-        const pile = deck.splice(0, index + 1);
-        return List(pile.slice(0, -1).concat([{ ...pile.pop(), upturned: true}]))
+        return List()
     }));
-}
-
-function upturnFirstCard(cards) {
-    return cards.map((card, index, pile) => {
-        if (index === pile.size - 1) { return { ...card, upturned: true }; }
-        else { return card; }
-    });
 }
 
 //this handles moving from pile to foundation
@@ -61,7 +52,7 @@ function moveCards(state, action) {
 
 export default function game(
     
-    state = getInitialState(shuffle(OrderedDeck)),
+    state = getInitialState(),
     action
 ) {
     switch (action.type) {
