@@ -52,6 +52,7 @@ export const ActionTypes = {
 
 export const mapCard = (card)=>{
     if (typeof card === 'object') {
+
       if (card.suit == 'SPADES') {
         return RanksValues[card.rank] + 0;
       }
@@ -64,17 +65,18 @@ export const mapCard = (card)=>{
       if (card.suit == 'CLUBS') {
         return RanksValues[card.rank] + 39;
       }
+
     } else {
+
       if (card <= 13) {
-        return {rank: ValuesRanks[card % 13] , suit: 'SPADES' };
+        return {rank: ValuesRanks[card] , suit: 'SPADES' };
+      } else if (card <= 26) {
+        return {rank: ValuesRanks[card - 13] , suit: 'HEARTS' };
+      } else if (card <= 39) {
+        return {rank: ValuesRanks[card - 26] , suit: 'DIAMONDS' };
+      } else {
+        return {rank: ValuesRanks[card - 39] , suit: 'CLUBS' };
       }
-      if (card <= 26) {
-        return {rank: ValuesRanks[card % 13] , suit: 'HEARTS' };
-      }
-      if (card <= 39) {
-        return {rank: ValuesRanks[card % 13] , suit: 'DIAMONDS' };
-      }
-  
-      return {rank: ValuesRanks[card % 13] , suit: 'CLUBS' };
+
     }
   }
