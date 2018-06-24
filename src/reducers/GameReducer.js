@@ -34,21 +34,28 @@ function getPiles() {
     }));
 }
 
-//this handles moving from pile to foundation
-//and removing from pile
-//so i reworked it to remove the right card
+function upturnFirstCard(cards) {
+    return cards.map((card, index, pile) => {
+        if (index === pile.size - 1) { return { ...card, upturned: true }; }
+        else { return card; }
+    });
+}
+
+
 function moveCards(state, action) {
-    let { cards, where, index } = action.payload;
+    let { cards, where } = action.payload;
     let source = state.getIn(where.from)
 
+    console.log('BEFORE',source, cards[0])
     const target = state.getIn(where.to).concat(cards);
-    console.log('Index is:'+index);
-    source = source.remove(index);
+    source = source.splice(source.indexOf(cards[0]), 1);
+    console.log('AFTER', source)
 
     return state
         .updateIn(where.to, value => target)
         .updateIn(where.from, value => source);
 }
+
 
 export default function game(
     

@@ -37,7 +37,7 @@ class Info extends React.Component {
         this.setState({
             joinedGame: true
           });
-        console.log("Joined Game succesfully");
+        console.log('Joined Game succesfully');
     }
 
     handleChange(event) {

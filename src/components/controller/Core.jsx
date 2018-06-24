@@ -10,6 +10,7 @@ import styles from './Core.css';
 //web3 control
 var eth;
 
+
 @connect(() => {
     eth = new EthWrapper();
     return new Object();
@@ -34,7 +35,10 @@ class Core extends React.Component {
             curGameState : -1,
             curGameStateText: '',
             myPlayerId: -1,
-            playerCount: 2
+            playerCount: 2,
+            dealtCards: false,
+            retrievedCards: false,
+            cardIteration: 0
         };
         //bind callbacks
         this.setAccounts = this.setAccounts.bind(this);
@@ -45,10 +49,6 @@ class Core extends React.Component {
         this.setGameState = this.setGameState.bind(this);
         this.setPlayerId = this.setPlayerId.bind(this);
         this.setCards = this.setCards.bind(this);
-
-        //local variables
-        this.dealtCards = false;
-        this.retrievedCards = false;
 
         //Now pull accounts
         eth.getAccounts(this.setAccounts);
@@ -76,15 +76,19 @@ class Core extends React.Component {
                 break;
             case '1':
                 if(!this.state.myTurn) return;
-                if(this.dealtCards) return;
-                this.dealtCards = true;
+                if(this.state.dealtCards) return;
+                this.setState({
+                    dealtCards: true
+                })
                 this.dealCards(this.state.playerCount);
                 console.log('DEAL');
                 break;
             case '2':
-                if(!this.retrievedCards){
+                if(!this.state.retrievedCards){
                     console.log('Retrieving my Cards!');
-                    this.retrievedCards = true;
+                    this.setState({
+                        retrievedCards: true
+                    })
                     eth.getCards(this.setCards);                  
                 }
                 break;
@@ -125,6 +129,9 @@ class Core extends React.Component {
     //Pulls every important game information
     setGameState(gS){
         var myNewTurn = (this.state.playerArray[gS[0]] == eth.getAccount());
+        //console.log(this.state.playerArray[gS[0]])
+        //console.log(eth.getAccount())
+        
         if(gS[0]==5) gS[0]='other players';
         var gStext = this.getGameStateText(gS[1]);
         this.setState({
@@ -133,12 +140,14 @@ class Core extends React.Component {
             curPlayer: gS[0],
             myTurn: myNewTurn
           });   
-        //console.log(gS);   
+        //console.log(gS); 
+        //console.log(this.state.myTurn)  
     }
     //sets your initial card deck
     setCards(newCards){
         this.setState({
-            cards: newCards
+            cards: newCards,
+            cardIteration: ++this.state.cardIteration
           });   
         console.log('Retrieved cards',newCards);
     }
@@ -225,6 +234,8 @@ class Core extends React.Component {
                 myTurn = {this.state.myTurn}
                 curPlayer = {this.state.curPlayer}
                 cards = {this.state.cards}
+                curGameState = {this.state.curGameState}
+                cardIteration = {this.state.cardIteration}
               />
             </div>
             <div className={styles.right} id='info'>

@@ -2,7 +2,7 @@ import React from 'react';
 import T from 'prop-types';
 import Foundation from '../display/Foundation.jsx';
 import DraggableCard from './DraggableCard.jsx';
-import { Suits, RanksValues, ValuesRanks } from '../../constants';
+import { Suits, RanksValues, ValuesRanks, mapCard} from '../../constants';
 import { DropTarget } from 'react-dnd';
 import EthWrapper from './EthWrapper.jsx';
 
@@ -36,15 +36,14 @@ export default class SmartFoundation extends React.Component {
     moveCards = (card) => {
         this.props.moveCards(
             [card],
-            { from: card.where, to: ['FOUNDATION', this.props.suit] },
-            card.index
+            { from: card.where, to: ['FOUNDATION', this.props.suit] }
         );
-        console.log("Dropped Card: " + Suits[card.suit] + card.rank);
+        console.log('Dropped Card: ' + Suits[card.suit] + card.rank);
+        console.log('from ',card.where)
         //card was dropped, now send it to the blockchain
         var ethWrapper = new EthWrapper();
         ethWrapper.playCard(mapCard(card), console.log);
-        console.log("Sent " + mapCard(card) + " to blockchain.");
-        //ethWrapper.takeCardsOnTable(console.log);
+        console.log('Sent ' + mapCard(card) + ' to blockchain.');
     }
 
     render() {

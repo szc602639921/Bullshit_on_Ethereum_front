@@ -10,75 +10,105 @@ import { Colors, Dimensions } from '../../constants';
 import Card from '../display/Card.jsx';
 import {mapCard} from '../../constants/Game'
 
-function MyCard (rank, suit) {
+
+function MyCard(rank, suit) {
     this.rank = rank;
     this.suit = suit;
     this.upturned = true;
 }
 
-@connect((state) => { 
-    return { game: state.game.toJS(), score: state.score} 
+@connect((state) => {
+    return {
+        game: state.game.toJS(),
+        score: state.score
+    }
 })
 
 @DragDropContext(HTML5Backend)
 class Game extends React.Component {
 
-    constructor(props) {
-        super(props);
-        //console.log('Props are ',props);
-        this.piles = [[],[],[],[]];
-
-    }
-
-    splitCards(){
-        var cards = this.props.cards;
-        console.log(cards);
-        if(cards==[]) return;
-
-        //Remove '0' from cards
-        for(var i = cards.length - 1; i >= 0; i--) {
-            if(cards[i] === '0') {
-                cards.splice(i, 1);
-            }
+        constructor(props) {
+            super(props);
+            //console.log('Props are ',props);
+            this.piles = [
+                [],
+                [],
+                [],
+                []
+            ];
+            this.gamePile = []
+            this.cardIteration = 0
         }
-        console.log('Sorted array',cards);
 
-        //now split between piles
-        for(i=0;i<cards.length; i++){
-            console.log(cards[i]);
-            var c = mapCard(cards[i]);
-            console.log('cur card',c);
-            switch(c.suit){
-                case 'SPADES':
-                    this.piles[0].push(c);
-                    break;
-                case 'HEARTS':
-                    this.piles[1].push(c);
-                    break;
-                case 'CLUBS':
-                    this.piles[2].push(c);
-                    break;
-                case 'DIAMONDS':
-                    this.piles[3].push(c);
-                    break;
+        checkCards(game) {
+            console.log(game.PILE);
+            if (this.cardIteration === this.props.cardIteration) {
+                console.log('No new Cards')
+                return;
             }
-        }
-        console.log(this.piles[0]);
-    }
+            this.cardIteration = this.props.cardIteration
+            console.log('Received new card iteration')
 
-    moveCards = (cards, where, index) => {
-        const { dispatch } = this.props;
-        dispatch(ActionCreators.moveCard(cards, where, index));
-    }
+            this.gamePile = this.props.cards;
+            console.log(this.gamePile);
+
+            // Safety check
+            if (this.gamePile == []) return;
+
+            // Remove '0' from cards
+            for (var i = this.gamePile.length - 1; i >= 0; i--) {
+                if (this.gamePile[i] === '0') {
+                    this.gamePile.splice(i, 1);
+                }
+            }
+            console.log('Sorted array', this.gamePile);
+
+            // Now split between piles
+            for (i = 0; i < this.gamePile.length; i++) {
+                console.log(this.gamePile[i]);
+                var c = mapCard(this.gamePile[i]);
+                console.log('cur card', c);
+                switch (c.suit) {
+                    case 'SPADES':
+                        this.moveCardToPile(c, 0);
+                        break;
+                    case 'HEARTS':
+                        this.moveCardToPile(c, 1);
+                        break;
+                    case 'CLUBS':
+                        this.moveCardToPile(c, 2);
+                        break;
+                    case 'DIAMONDS':
+                        this.moveCardToPile(c, 3);
+                        break;
+                }
+            }
+            console.log(game.PILE);
+            return true;
+        }
+
+        moveCardToPile = (card, where) => {
+            const {
+                dispatch
+            } = this.props;
+            dispatch(
+                ActionCreators.moveCard(
+                    [card],
+                    { from: ['PILE', 5], to: ['PILE', where] }
+                )
+            );
+        }
+
+        moveCards = (cards, where) => {
+            const { dispatch } = this.props;
+            dispatch(ActionCreators.moveCard(cards, where));
+        }
+    
 
     render() {
         const { game, score } = this.props;
         const { moveCards, turnCard } = this;
-        this.splitCards();
-        game.PILE[0] = this.piles[0];
-        game.PILE[1] = this.piles[1];
-        game.PILE[2] = this.piles[2];
-        game.PILE[3] = this.piles[3];
+        this.checkCards(game);
 
         return (
             <div style={{
@@ -100,7 +130,7 @@ class Game extends React.Component {
                             upturned={true}
                         />
                      </div>
-                        {this.props.myTurn && this.props.gameState == 2 ? (
+                        {this.props.myTurn && this.props.curGameState == 2 ? (
                             <div>                      
                             <h2>It's your turn!</h2>
                             <SmartFoundation
