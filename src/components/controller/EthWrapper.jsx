@@ -70,7 +70,7 @@ class EthWrapper{
     }
 
     getCards(callback){
-        EthWrapper.gameContract.methods.getCards(EthWrapper.GameName).call().then(callback);
+        EthWrapper.gameContract.methods.getCards(EthWrapper.GameName).call({from:EthWrapper.account}).then(callback);
     }
 }
 

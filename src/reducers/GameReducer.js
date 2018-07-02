@@ -15,32 +15,24 @@ function getInitialState() {
 
     return Map({
         [Places.FOUNDATION]: Map({
-            HEARTS: List(),
-            SPADES: List(),
-            DIAMONDS: List(),
-            CLUBS: List()
+            HEARTS: [],
+            SPADES: [],
+            DIAMONDS: [],
+            CLUBS: []
         }),
         [Places.PILE]: getPiles(),
         [Places.DECK]: Map({
-            upturned: List(),
-            downturned: List()
+            upturned: [],
+            downturned: []
         })
     });
 }
 
 function getPiles() {
     return List(range(0, 6).map(index => {
-        return List()
+        return []
     }));
 }
-
-function upturnFirstCard(cards) {
-    return cards.map((card, index, pile) => {
-        if (index === pile.size - 1) { return { ...card, upturned: true }; }
-        else { return card; }
-    });
-}
-
 
 function moveCards(state, action) {
     let { cards, where } = action.payload;
@@ -48,7 +40,13 @@ function moveCards(state, action) {
 
     console.log('BEFORE',source, cards[0])
     const target = state.getIn(where.to).concat(cards);
-    source = source.splice(source.indexOf(cards[0]), 1);
+    for(var i=0; i<source.length; i++){
+        if(source[i].rank == cards[0].rank) {
+            console.log('removing', source[i])
+            source.splice(i,1);
+        }
+    }
+    
     console.log('AFTER', source)
 
     return state

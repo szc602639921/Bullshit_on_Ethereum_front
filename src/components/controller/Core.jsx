@@ -165,7 +165,7 @@ class Core extends React.Component {
     dealCards(playerAmount){
         var deck = [];
 
-        for (var i = 0; i < 52; i++) {
+        for (var i = 1; i < 53; i++) {
            deck.push(i);
         }
 
