@@ -94,6 +94,11 @@ class Core extends React.Component {
                     })
                     eth.getCards(this.setCards);                  
                 }
+                if(this.state.tookCards){
+                    this.setState({
+                        tookCards: false
+                    })
+                }
                 break;
             case '3':
                 if(!this.state.myTurn) return;
@@ -104,7 +109,13 @@ class Core extends React.Component {
                 })
                 var me = this
                 eth.takeCardsOnTable(function(error, event){
-                    console.log('Received LIE EVENT:',event, error)
+                    if(error) return
+                    console.log('Received LIE EVENT:',event)
+                    console.log(event.returnValues.cards)
+                    me.setState({
+                        cards: event.returnValues.cards,
+                        cardIteration: ++me.state.cardIteration
+                    })
                 });
                 break;
             case '4':

@@ -49,7 +49,7 @@ class EthWrapper{
     }
 
     takeCardsOnTable(callback){
-        var event = EthWrapper.gameContract.events.CardsAvailable(callback);
+        var event = EthWrapper.gameContract.events.CardsAvailable({filter: {gameName: EthWrapper.GameName}}, callback);
         EthWrapper.gameContract.methods.takeCardsOnTable(EthWrapper.GameName).send({from:EthWrapper.account, gas:3000000});
     }
 
@@ -91,7 +91,7 @@ if (typeof web3 !== 'undefined') {
 }    
 Too complicated for debugging*/
 
-EthWrapper.web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:7545')); 
+EthWrapper.web3 = new Web3(new Web3.providers.WebsocketProvider('ws://localhost:7545')); 
 
 //this is the contract adress
 var addr = '0x64364303fa61579a77bc1e74c63cf0c63a2c7674';
