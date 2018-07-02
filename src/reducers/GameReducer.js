@@ -38,16 +38,20 @@ function moveCards(state, action) {
     let { cards, where } = action.payload;
     let source = state.getIn(where.from)
 
-    console.log('BEFORE',source, cards[0])
+    if(state.getIn(where.from) == state.getIn(where.to))    {
+        console.log('Same staple return')
+        return state;
+    }
+
+    //console.log('BEFORE',source, cards[0])
     const target = state.getIn(where.to).concat(cards);
     for(var i=0; i<source.length; i++){
-        if(source[i].rank == cards[0].rank) {
+        if(source[i].rank == cards[0].rank && source[i].suit == cards[0].suit) {
             console.log('removing', source[i])
             source.splice(i,1);
         }
     }
-    
-    console.log('AFTER', source)
+    //console.log('AFTER', source)
 
     return state
         .updateIn(where.to, value => target)

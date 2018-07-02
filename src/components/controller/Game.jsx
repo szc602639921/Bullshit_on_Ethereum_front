@@ -38,12 +38,15 @@ class Game extends React.Component {
             ];
             this.gamePile = []
             this.cardIteration = 0
+
+            //bind callback
+            this.handleClick = this.handleClick.bind(this);
         }
 
         checkCards(game) {
-            console.log(game.PILE);
+            //console.log(game.PILE);
             if (this.cardIteration === this.props.cardIteration) {
-                console.log('No new Cards')
+                //console.log('No new Cards')
                 return;
             }
             this.cardIteration = this.props.cardIteration
@@ -103,7 +106,11 @@ class Game extends React.Component {
             const { dispatch } = this.props;
             dispatch(ActionCreators.moveCard(cards, where));
         }
-    
+
+    handleClick() {
+        console.log('The link was clicked.')
+        this.props.lieCallback()
+    }
 
     render() {
         const { game, score } = this.props;
@@ -123,13 +130,24 @@ class Game extends React.Component {
                     marginTop: 40
                 }}> 
                     <div>    
-                        <h2>Current Card</h2>
-                        <Card
-                            rank={"A"}
-                            suit={"SPADES"}
+                        {this.props.curOpenCard != undefined ? (
+                            <div>                      
+                            <h2>Current Card</h2>
+                            <Card
+                            rank={this.props.curOpenCard.rank}
+                            suit={this.props.curOpenCard.suit}
                             upturned={true}
-                        />
-                     </div>
+                            />
+                            </div>
+                            )
+                            :
+                            (
+                                <h2>Currently no open card</h2>
+                            )
+                        }
+                    </div>
+
+                    <div>
                         {this.props.myTurn && this.props.curGameState == 2 ? (
                             <div>                      
                             <h2>It's your turn!</h2>
@@ -138,6 +156,10 @@ class Game extends React.Component {
                                 cards={game.FOUNDATION.HEARTS}
                                 moveCards={moveCards}
                             />
+                            <div>
+                                <br/>
+                                <button onClick={this.handleClick}> -----   It's a LIE!   ----- </button> 
+                            </div>
                             </div>
                             )
                             :
@@ -145,6 +167,7 @@ class Game extends React.Component {
                                 <h2>Waiting for {this.props.curPlayer}</h2>
                             )
                         }
+                </div>
                 </div>
                 <h2>Your Deck</h2>
                 <div style={{

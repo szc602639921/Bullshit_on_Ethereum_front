@@ -23,7 +23,7 @@ class EthWrapper{
     }
 
     claimLie(callback){
-        EthWrapper.gameContract.methods.claimLie(EthWrapper.GameName).call().then(callback);
+        EthWrapper.gameContract.methods.claimLie(EthWrapper.GameName).send({from:EthWrapper.account, gas:3000000});
     }
     
     dealCards(cards){
@@ -49,7 +49,8 @@ class EthWrapper{
     }
 
     takeCardsOnTable(callback){
-        EthWrapper.gameContract.methods.takeCardsOnTable(EthWrapper.GameName).send({from:EthWrapper.account, gas:3000000}).then(callback);
+        var event = EthWrapper.gameContract.events.CardsAvailable(callback);
+        EthWrapper.gameContract.methods.takeCardsOnTable(EthWrapper.GameName).send({from:EthWrapper.account, gas:3000000});
     }
 
     getGameState(callback){

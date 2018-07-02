@@ -6,6 +6,7 @@ import Info from './Info.jsx';
 import { connect } from 'react-redux';
 import EthWrapper from './EthWrapper.jsx';
 import styles from './Core.css';
+import {mapCard} from '../../constants/Game'
 
 //web3 control
 var eth;
@@ -38,7 +39,9 @@ class Core extends React.Component {
             playerCount: 2,
             dealtCards: false,
             retrievedCards: false,
-            cardIteration: 0
+            cardIteration: 0,
+            tookCards: false,
+            curOpenCard: 0
         };
         //bind callbacks
         this.setAccounts = this.setAccounts.bind(this);
@@ -94,8 +97,15 @@ class Core extends React.Component {
                 break;
             case '3':
                 if(!this.state.myTurn) return;
-                //submitNonce();
+                if(this.state.tookCards) return;
                 console.log('LIE');
+                this.setState({
+                    tookCards: true
+                })
+                var me = this
+                eth.takeCardsOnTable(function(error, event){
+                    console.log('Received LIE EVENT:',event, error)
+                });
                 break;
             case '4':
                 console.log('REVEAL');
@@ -134,11 +144,16 @@ class Core extends React.Component {
         
         if(gS[0]==5) gS[0]='other players';
         var gStext = this.getGameStateText(gS[1]);
+        var curCard = 0
+        if(gS[2] != 0) curCard = mapCard(gS[2])
+        console.log('curcard',curCard)
+
         this.setState({
             curGameState: gS[1],
             curGameStateText: gStext,
             curPlayer: gS[0],
-            myTurn: myNewTurn
+            myTurn: myNewTurn,
+            curOpenCard: curCard
           });   
         //console.log(gS); 
         //console.log(this.state.myTurn)  
@@ -225,6 +240,10 @@ class Core extends React.Component {
         }
     }
 
+    lie(){
+        eth.claimLie()
+        console.log('claimed lie')
+    }
 
     render(){
         return(
@@ -236,6 +255,8 @@ class Core extends React.Component {
                 cards = {this.state.cards}
                 curGameState = {this.state.curGameState}
                 cardIteration = {this.state.cardIteration}
+                lieCallback = {this.lie}
+                curOpenCard = {this.state.curOpenCard}
               />
             </div>
             <div className={styles.right} id='info'>
