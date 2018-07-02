@@ -108,7 +108,6 @@ class Game extends React.Component {
         }
 
     handleClick() {
-        console.log('The link was clicked.')
         this.props.lieCallback()
     }
 

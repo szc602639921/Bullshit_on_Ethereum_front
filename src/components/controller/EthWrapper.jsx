@@ -42,14 +42,15 @@ class EthWrapper{
         EthWrapper.gameContract.methods.isGameFull(EthWrapper.GameName).call().then(callback);
     }
 
-    joinGame(gameName, callback){
+    joinGame(gameName, playerCount, callback){
         EthWrapper.GameName = gameName;
         console.log('Joining game '+EthWrapper.GameName+' with account '+EthWrapper.account);
-        EthWrapper.gameContract.methods.join(EthWrapper.GameName, 2).send({from:EthWrapper.account, gas:3000000}).then(callback);
+        EthWrapper.gameContract.methods.join(EthWrapper.GameName, playerCount).send({from:EthWrapper.account, gas:3000000}).then(callback);
     }
 
     takeCardsOnTable(callback){
-        var event = EthWrapper.gameContract.events.CardsAvailable({filter: {gameName: EthWrapper.GameName}}, callback);
+        //var event = EthWrapper.gameContract.events.CardsAvailable({filter: {gameName: EthWrapper.GameName}}, callback);
+        EthWrapper.gameContract.once('CardsAvailable',callback);
         EthWrapper.gameContract.methods.takeCardsOnTable(EthWrapper.GameName).send({from:EthWrapper.account, gas:3000000});
     }
 

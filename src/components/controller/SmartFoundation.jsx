@@ -48,11 +48,7 @@ export default class SmartFoundation extends React.Component {
 
     render() {
         const { connectDropTarget, isOver, suit, cards, canDrop } = this.props;
-        const card = cards.length ?
-            <DraggableCard {...cards[cards.length - 1]}
-                upturned where={['FOUNDATION', suit]}
-            /> :
-            null;
+        const card = null;
         return connectDropTarget(
             <div>
                 <Foundation

@@ -26,11 +26,14 @@ class Info extends React.Component {
         //use states so site refreshes on state change
         this.state = {
             joinedGame: false,
+            playerCount: 2,
+            gameName: 'GAMENAME'
         };
         //bind to pass this
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-        this.isSubmit = this.isSubmit.bind(this);        
+        this.handleChange = this.handleChange.bind(this)
+        this.handleSubmit = this.handleSubmit.bind(this)
+        this.isSubmit = this.isSubmit.bind(this)
+        this.handlePlayerCount = this.handlePlayerCount.bind(this)
     }
 
     isSubmit(){
@@ -45,14 +48,20 @@ class Info extends React.Component {
         this.setState({
             gameName: event.target.value
           });
+    }
 
+    handlePlayerCount(event) {
+        //this triggers a state change with rendering afterwards
+        this.setState({
+            playerCount: event.target.value
+          });
     }
 
     handleSubmit(event) {
         //prevent refresh
         event.preventDefault();
         //join game
-        this.props.callback(this.state.gameName, this.isSubmit); 
+        this.props.callback(this.state.gameName, this.state.playerCount, this.isSubmit); 
     }
 
     
@@ -70,6 +79,9 @@ class Info extends React.Component {
                     <form onSubmit={this.handleSubmit}>
                         <label>
                             <input type="text" name={this.state.gameName} onChange={this.handleChange} />
+                        </label>
+                        <label>
+                            <input type="number" name={this.state.playerCount} onChange={this.handlePlayerCount} min="2" max="5"/>
                         </label>
                         <input type="submit" value="Join" />
                     </form>

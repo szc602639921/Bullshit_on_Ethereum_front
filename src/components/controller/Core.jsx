@@ -76,8 +76,10 @@ class Core extends React.Component {
         //Check if and what I have to do
         switch(this.state.curGameState){
             case '0':
+                //JOIN
                 break;
             case '1':
+                //DEAL
                 if(!this.state.myTurn) return;
                 if(this.state.dealtCards) return;
                 this.setState({
@@ -87,6 +89,7 @@ class Core extends React.Component {
                 console.log('DEAL');
                 break;
             case '2':
+                //PLAY
                 if(!this.state.retrievedCards){
                     console.log('Retrieving my Cards!');
                     this.setState({
@@ -101,6 +104,7 @@ class Core extends React.Component {
                 }
                 break;
             case '3':
+                //LIE
                 if(!this.state.myTurn) return;
                 if(this.state.tookCards) return;
                 console.log('LIE');
@@ -127,11 +131,11 @@ class Core extends React.Component {
     /**
      * Set state functions
      */
-    joinGame(gName, callback){
+    joinGame(gName, playerCount, callback){
         this.setState({
             gameName: gName,
           });
-        eth.joinGame(gName);
+        eth.joinGame(gName, playerCount);
         console.log('Joining game',this.state.gameName);
         callback();
     }
@@ -157,7 +161,7 @@ class Core extends React.Component {
         var gStext = this.getGameStateText(gS[1]);
         var curCard = 0
         if(gS[2] != 0) curCard = mapCard(gS[2])
-        console.log('curcard',curCard)
+        //console.log('curcard',curCard)
 
         this.setState({
             curGameState: gS[1],
