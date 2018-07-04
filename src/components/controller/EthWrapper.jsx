@@ -25,13 +25,9 @@ class EthWrapper{
     claimLie(callback){
         EthWrapper.gameContract.methods.claimLie(EthWrapper.GameName).send({from:EthWrapper.account, gas:3000000});
     }
-    
+
     dealCards(cards){
         EthWrapper.gameContract.methods.dealCards(EthWrapper.GameName, cards).send({from:EthWrapper.account, gas:3000000});
-    }
-
-    getCards(callback){
-        EthWrapper.gameContract.methods.getCards(EthWrapper.GameName).call().then(callback);
     }
 
     retrieveNonces(nonce, callback){

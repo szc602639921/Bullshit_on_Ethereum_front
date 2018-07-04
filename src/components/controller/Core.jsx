@@ -131,11 +131,12 @@ class Core extends React.Component {
     /**
      * Set state functions
      */
-    joinGame(gName, playerCount, callback){
+    joinGame(gName, pCount, callback){
         this.setState({
             gameName: gName,
+            playerCount: pCount
           });
-        eth.joinGame(gName, playerCount);
+        eth.joinGame(gName, pCount);
         console.log('Joining game',this.state.gameName);
         callback();
     }
