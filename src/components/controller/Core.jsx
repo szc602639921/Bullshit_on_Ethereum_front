@@ -176,11 +176,12 @@ class Core extends React.Component {
     }
     //sets your initial card deck
     setCards(newCards){
+        var cardArray = newCards.replace('[','').replace(']','').split(',')
         this.setState({
-            cards: newCards,
+            cards: cardArray,
             cardIteration: ++this.state.cardIteration
           });   
-        console.log('Retrieved cards',newCards);
+        console.log('Retrieved cards',cardArray);
     }
 
     /**
