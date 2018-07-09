@@ -11,5 +11,7 @@ rm -r build
 truffle compile
 truffle migrate
 cd ../streebog_frontend 
-chromium-browser http://localhost:3000 --auto-open-devtools-for-tabs &
+#chromium-browser http://localhost:3000 --auto-open-devtools-for-tabs &
+chromium-browser http://localhost:3000  &
+
 npm start

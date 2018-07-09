@@ -17,7 +17,7 @@ openpgp.generateKey(options).then(function(key) {
     privkey = key.privateKeyArmored; // '-----BEGIN PGP PRIVATE KEY BLOCK ... '
     pubkey = key.publicKeyArmored;   // '-----BEGIN PGP PUBLIC KEY BLOCK ... '
 
-    console.log(privkey, pubkey)
+    alert(privkey, pubkey)
 });
 
 async function encrypt(pkey, data){
