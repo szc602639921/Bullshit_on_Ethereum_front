@@ -80,11 +80,16 @@ class Core extends React.Component {
                 break;
             case '1':
                 //DEAL
+                console.log('Start_DEAL');
+                console.log(this.state.myTurn);
                 if(!this.state.myTurn) return;
+                console.log('Start_DEAL1');
                 if(this.state.dealtCards) return;
+                console.log('Start_DEAL2');
                 this.setState({
                     dealtCards: true
                 })
+                console.log('Start_DEAL2');
                 this.dealCards(this.state.playerCount);
                 console.log('DEAL');
                 break;
@@ -154,9 +159,11 @@ class Core extends React.Component {
     }
     //Pulls every important game information
     setGameState(gS){
+
         var myNewTurn = (this.state.playerArray[gS[0]] == eth.getAccount());
-        //console.log(this.state.playerArray[gS[0]])
-        //console.log(eth.getAccount())
+        console.log(this.state.playerArray)
+        console.log(this.state.playerArray[gS[0]])
+        console.log(eth.getAccount())
         
         if(gS[0]==5) gS[0]='other players';
         var gStext = this.getGameStateText(gS[1]);
@@ -194,6 +201,7 @@ class Core extends React.Component {
         }
         return a;
     }
+
     dealCards(playerAmount){
         var deck = [];
 

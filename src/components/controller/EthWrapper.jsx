@@ -48,8 +48,9 @@ async function decrypt(enc){
 
 class EthWrapper{
 
-    getAccounts(callback){
-        EthWrapper.web3.eth.getAccounts().then(callback);
+    async getAccounts(callback){
+       // EthWrapper.web3.eth.getAccounts().then(callback);
+       EthWrapper.web3.eth.getAccounts().then(callback);
     }
 
     getPlayers(callback){
@@ -98,10 +99,18 @@ class EthWrapper{
         EthWrapper.gameContract.methods.isGameFull(EthWrapper.GameName).call().then(callback);
     }
 
-    joinGame(gameName, playerCount, callback){
+    async joinGame(gameName, playerCount, callback){
         EthWrapper.GameName = gameName;
         console.log('Joining game '+EthWrapper.GameName+' with account '+EthWrapper.account);
+
         EthWrapper.gameContract.methods.join(EthWrapper.GameName, playerCount, pubkey).send({from:EthWrapper.account, gas:3000000}).then(callback);
+        window.addEventListener('load', async () => {
+            try {
+                     await ethereum.enable();
+                   } catch (error) {
+                       console.log(error.message);
+                   }
+            });
     }
 
     takeCardsOnTable(callback){
@@ -131,12 +140,38 @@ class EthWrapper{
     }
 }
 
+var web3Provider;
+var Web3 = require('web3');
+async function initWeb3() {
+	// Modern dapp browsers...
+	if (window.ethereum) {
+	web3Provider = window.ethereum;
+	  try {
+	    // Request account access
+		await window.ethereum.enable();
+		
+	  } catch (error) {
+	    // User denied account access...
+	    console.error("User denied account access")
+	  }
+	  
+	}
+	// Legacy dapp browsers...
+	else if (window.web3) {
+	web3Provider = window.web3.currentProvider;
+	}
+	// If no injected web3 instance is detected, fall back to Ganache
+	else {
+	web3Provider = new Web3.providers.HttpProvider('http://localhost:7545');
+	  
+	}
+  }
 //static variables
 EthWrapper.account = '0x0';
 EthWrapper.GameName = '';
 
 //Initialize WEB3
-var Web3 = require('web3');
+
 // Is there an injected web3 instance?
 /*
 if (typeof web3 !== 'undefined') {
@@ -146,17 +181,17 @@ if (typeof web3 !== 'undefined') {
     EthWrapper.web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:7545'));
 }
 Too complicated for debugging*/
-
-EthWrapper.web3 = new Web3(new Web3.providers.WebsocketProvider('ws://localhost:7545'));
+initWeb3()
+EthWrapper.web3 = new Web3(web3Provider);
 
 //this is the contract adress
-var addr = '0x64364303fa61579a77bc1e74c63cf0c63a2c7674';
+var addr = '0x868Bb9834C83c0FEeD1475b5Ca773a33e8BB704B';
 EthWrapper.gameContract = new EthWrapper.web3.eth.Contract(Abi.abi, addr);
 
 //assign standard account
 var e = new EthWrapper();
 e.getAccounts(function(accounts){
-    EthWrapper.account = accounts[0];
+    EthWrapper.account = accounts[0]//.toString().toUpperCase();
     console.log(EthWrapper.account);
 });
 
