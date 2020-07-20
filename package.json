@@ -23,7 +23,7 @@
     "file-system": "^2.2.2",
     "fs": "0.0.1-security",
     "immutable": "^3.7.5",
-    "lodash": "^4.17.5",
+    "lodash": "^4.17.19",
     "openpgp": "^3.0.12",
     "prop-types": "^15.6.2",
     "react": "^16.2.0",
